@@ -25,4 +25,4 @@ class Config:
         self.conf_fh.close()
 
     def config_load(self):
-        self.config = yaml.load(self.conf_fh.read())
+        self.config = yaml.load(self.conf_fh.read(), Loader=yaml.FullLoader)
