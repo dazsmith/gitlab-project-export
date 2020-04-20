@@ -35,6 +35,10 @@ if __name__ == '__main__':
         '-d', dest='debug', default=False, action='store_const',
         const=True, help='Debug mode'
     )
+    parser.add_argument(
+        '-r', dest='regularity', default="day",
+        help='Specify the regularity of this backup. See config.yaml-example'
+    )
 
     args = parser.parse_args()
 
@@ -59,12 +63,17 @@ if __name__ == '__main__':
         print("Unable to get projects for your account", file=sys.stderr)
         sys.exit(1)
 
+    if args.debug:
+        print("regularity is %s" % args.regularity)
+
     # Check projects against config
     # Create export_projects array
     for project_pattern in c.config["gitlab"]["projects"]:
         for gitlabProject in projects:
-            if re.match(project_pattern, gitlabProject):
-                export_projects.append(gitlabProject)
+            if re.match(project_pattern["name"], gitlabProject):
+                for regularity_pattern in project_pattern["regularity"]:
+                    if re.match(regularity_pattern, args.regularity):
+                        export_projects.append(gitlabProject)
 
     if args.debug:
         print("Projects to export: " + str(export_projects))
@@ -94,8 +103,9 @@ if __name__ == '__main__':
         d = date.today()
         # File template from config
         file_tmpl = c.config["backup"]["backup_name"]
+        file_tmpl_reg = file_tmpl.replace("{REGULARITY}", args.regularity)
         # Projectname in dest_file
-        dest_file = destination + "/" + file_tmpl.replace(
+        dest_file = destination + "/" + file_tmpl_reg.replace(
             "{PROJECT_NAME}",
             project.replace("/", "-")
         )

@@ -10,8 +10,10 @@ gitlab:
     gitlab_url: "https://gitlab.com"
     token: "MY_PERSONAL_SECRET_TOKEN"
   projects:
-    - rvojcik/example-project
+    - name: rvojcik/example-project
+      regularity: [year, month, week, day]
     - rvojcik/group/*
+      regularity: [year]
 
 #
 # Backup configuration
@@ -24,14 +26,16 @@ backup:
   destination: "/data/backup"
 
   # Backup Name template
-  # Is it possible to use some placeholders in the name
+  # It is possible to use some placeholders in the name
   #   {PROJECT_NAME} - Name of the project with full path
   #   Path slashes is replaces with dashes.
   #   Example:
   #     rvojcik/project1 => rvojcik-project1
   #
   #   {TIME} - Time of the export
-  backup_name: "gitlab-com-{PROJECT_NAME}-{TIME}.tar.gz"
+  #   {REGULARITY} - The regularity selected as an
+  #   argument passed to the script.
+  backup_name: "gitlab-com-{PROJECT_NAME}-{REGULARITY}-{TIME}.tar.gz"
 
   # Time format tamplate
   # Time is construct by python strftime.
