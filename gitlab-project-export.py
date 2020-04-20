@@ -83,10 +83,11 @@ if __name__ == '__main__':
             print("Exporting %s" % (project))
 
         # Download project to our destination
+        destination = c.config["backup"]["destination"]
         if c.config["backup"]["project_dirs"]:
-            destination = c.config["backup"]["destination"] + "/" + project
-        else:
-            destination = c.config["backup"]["destination"]
+            destination = destination + "/" + project
+        if c.config["backup"]["regularity_dirs"]:
+            destination = destination + "/" + args.regularity
 
         # Create directories
         if not os.path.isdir(destination):

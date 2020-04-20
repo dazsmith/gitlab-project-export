@@ -21,6 +21,8 @@ gitlab:
 backup:
   # Create separate directory for every project
   project_dirs: False
+  # Create separate directory (under the project directory, if project_dirs: True) for the regularity
+  regularity_dirs: False
 
   # Destination of the exports/backups
   destination: "/data/backup"
